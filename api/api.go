@@ -4,7 +4,6 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/riona/blog/model"
 	"github.com/riona/blog/shared/db"
-	"log"
 	"time"
 )
 
