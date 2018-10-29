@@ -5,6 +5,6 @@ db:
     database: blog
     pool: 4
     host: localhost
-    port: 3000
+    port: 3006
     user: root
     password: password
