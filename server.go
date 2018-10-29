@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"text/template"
+	"github.com/jinzhu/gorm"
 )
 
 type Page struct {
@@ -33,6 +34,14 @@ func createArticle(w http.ResponseWriter, r *http.Request) {
 		Body:  "World",
 	}
 	fmt.Fprint(w, article)
+}
+
+func connection () *gorm.DB{
+	db, err := gorm.Open("mysql", "root:password@/gorm?charset=utf8&parseTime=True")
+	if err != nil {
+		log.Fatalf("error connection mysql. err: %v", err)
+	}
+	return db
 }
 
 func main() {
