@@ -6,17 +6,19 @@ import (
 )
 
 type Config struct {
-	Adapter  string `yaml:"adapter"`
-	Encoding string `yaml:"encoding"`
-	Database string `yaml:"database"`
-	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
-	User     string `yaml:"user"`
-	Password string `yaml:"password"`
+	DB struct {
+		Adapter  string `yaml:"adapter"`
+		Encoding string `yaml:"encoding"`
+		Database string `yaml:"database"`
+		Host     string `yaml:"host"`
+		Port     int    `yaml:"port"`
+		User     string `yaml:"user"`
+		Password string `yaml:"password"`
+	}
 }
 
 func NewConfig() (*Config, error) {
-	buf, err := ioutil.ReadFile("./config.yml")
+	buf, err := ioutil.ReadFile("..//config.yml")
 	if err != nil {
 		return nil, err
 	}
