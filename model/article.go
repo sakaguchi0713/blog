@@ -4,7 +4,6 @@ import "time"
 
 type Article struct {
 	Title string
-	Body string
-	Date time.Time
+	Body  string
+	Date  time.Time
 }
-

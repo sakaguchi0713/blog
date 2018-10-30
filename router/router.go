@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/riona/blog/controller/article"
 )
 
 func main() {
-	r := gin.Default()
-	router := gin.Default()
+	router := gin.New()
 
-	router.GET("blogs", GetBlogs)
-	r.Run() // listen and server on 0.0.0.0:8080
+	router.GET("/index", article.GetIndex)
+	router.Run(":8080")
 }
