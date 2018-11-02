@@ -2,44 +2,49 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/riona/blog/controller/article"
 	"net/http"
-	"fmt"
+	"github.com/riona/blog/controller/article"
+	"strconv"
 )
 
 func main() {
-	router := gin.New()
+	router := gin.Default()
+	router.LoadHTMLGlob("../assets/templates/*.tmpl")
 
 	//index page
 	router.GET("/index", func(c *gin.Context) {
+
 		finder, err := article.NewFinder()
 		if err != nil {
-			c.Status(http.StatusBadRequest)
+			c.String(http.StatusBadRequest, "caused error new finder")
 		}
 
 		articles := finder.FindArticleForIndex()
-		for key, values := range articles {
-			for _, value := range values {
-				str := fmt.Sprint(key)
-				c.String(http.StatusOK, "ID: %s, \nTITLE: %s \n", str, value.Title)
-			}
-		}
+		c.HTML(http.StatusOK, "index.tmpl", gin.H{
+			"articles": articles,
+		})
 	})
-	//router.Run(":8080")
-	//
-	//router.GET("/show", func(c *gin.Context) {
-	//	finder, err := article.NewFinder()
-	//	if err != nil {
-	//		c.Status(http.StatusBadRequest)
-	//	}
-	//
-	//	articles := finder.FindArticleForIndex()
-	//	for key, values := range articles {
-	//		for _, value := range values {
-	//			c.String(http.StatusOK, "ID: %d, \nTITLE: %s \n", key, value)
-	//		}
-	//	}
-	//})
-	//router.Run(":8080")
-}
 
+	// show page
+	router.GET("/show/:id", func(c *gin.Context) {
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			c.String(http.StatusBadRequest, "error parse string to int")
+		}
+
+		finder, err := article.NewFinder()
+		if err != nil {
+			c.String(http.StatusBadRequest, "caused error new finder")
+		}
+
+		article := finder.FindArticleByArticle(id)
+
+		c.HTML(http.StatusOK, "show.tmpl", gin.H{
+			"title": article.Title,
+			"body": article.Body,
+			"time": article.Date,
+		})
+	})
+
+	router.Run(":8080")
+}

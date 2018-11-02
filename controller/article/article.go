@@ -4,12 +4,11 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/riona/blog/model"
 	"github.com/riona/blog/shared/db"
-	"time"
 )
 
 type ArticleFinder interface {
-	FindArticleForIndex() (map[time.Time][]string, error)
-	FindArticleByDate(postTime time.Time) ([]model.Article, error)
+	FindArticleForIndex() []*model.Article
+	findArticleByArticle(id int) model.Article
 	FindAllArticles() ([]model.Article, error)
 }
 
@@ -32,26 +31,15 @@ func NewFinder() (*finder, error) {
 	return f, nil
 }
 
-func (f *finder) FindArticleForIndex() map[int][]model.Article {
-	var articles []model.Article
+func (f *finder) FindArticleForIndex() []*model.Article {
+	var articles []*model.Article
 	f.db.Find(&articles)
-
-	index := map[int][]model.Article{}
-	for _, art := range articles {
-		_, ok := index[art.ID]
-		if !ok {
-			index[art.ID] = []model.Article{art}
-		} else {
-			index[art.ID] = append(index[art.ID], art)
-		}
-	}
-
-	return index
+	return articles
 }
 
-func (f *finder) findArticleByDate(postTime time.Time) []model.Article {
-	var articles []model.Article
-	f.db.Find(&articles, "date=?", postTime)
+func (f *finder) FindArticleByArticle(id int) model.Article {
+	var articles model.Article
+	f.db.Find(&articles, "id=?", id)
 	return articles
 }
 
