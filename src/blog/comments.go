@@ -1,0 +1,11 @@
+package blog
+
+import "time"
+
+type Comment struct {
+	ID        int       `db:"id"`
+	Title     string    `db:"title"`
+	Body      string    `db:"body"`
+	CreateAt  time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
+}
